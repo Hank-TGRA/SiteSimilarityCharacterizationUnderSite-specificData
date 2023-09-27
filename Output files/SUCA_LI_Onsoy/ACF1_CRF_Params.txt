@@ -1,0 +1,2 @@
+site_id, mu_updated, sd_updated, sof_updated, mu_lower, mu_upper
+1 3.063195 0.682647 1.809049 2.499585 3.776932

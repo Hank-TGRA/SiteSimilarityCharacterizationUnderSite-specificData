@@ -1,0 +1,127 @@
+--User manual
+--
+--
+Program introduction:
+  This program is used to characterize the statistical uncertainty of borehole data obtained by the 
+geotechnical field investigation. By this program, the equivalent samples of statistical charactertistics
+(i.e. mean, var, and SOF (scale of fluctuation)) can be obtained, and then, the quantiles and confidence
+interval of equivalent samples can be used to quantify the statistical uncertainty. For some technical 
+details, the users can refer to Han et al. (2022a).
+--
+--
+Impletementation procedure
+1. Installation
+  There are two stratgies to install the package.
+  (1) In order to install the package, put the files to a folder of your choice and add this package
+folder to the MATLAB path.
+  (2) For simplicity, users can also directly put the files to a new folder within the "bin" folder under 
+the installation path of MATLAB. For instance, in the example case, the package folder is 
+"D:\Program Files\MATLAB\R2022b\bin\CodeTest"
+--
+2. Data preparation
+  (1) Prepare the borehole data regarding a certain geo-material parameter in a specific site. Put the borehole 
+data into the file named as "BoreholeData.txt". In "BoreholeData.txt", 1st column is the site ID. Generally, the 
+statistical uncertainty characterization only care about one site, and hence, the site ID can be a any number 
+such as 1. Then, 2nd column contains the depth data, and 3rd column contains the geo-material parameteric data 
+in the specific site.
+  (2) Prepare the background data regarding the geo-material parameter in "BoreholeData_Clay_10_7490.txt" and put 
+it into the file named as "BackgroundData.txt". In "BackgroundData.txt", 1st column contains the site ID information, 
+2nd column contains the depth data of each site, and 3rd column contains the geo-material parameteric data of each site.
+  Note: if the geo-material parameter for study is a non-negative variable, the lognormal transformation should 
+applied to it. In the example, the geo-material parameter for study is the liquid index (LI) that can be negative,
+and as a result, the lognormal transformation is not required for LI.
+--
+3. Obtain the basic parameters for statistical uncertainty characterization
+  To obtain the basic parameters for statistical uncertainty characterization, the program named as 
+"BasicParametersEstimation_master.m" should be run. In the program above, several arguments should be modified before
+running.
+  (1) Modify the argument "datasetname". The argument "datasetname" specifies the dataset name. In the example case,
+the dataset name is "BackgroundData.txt".
+  (2) Modify the argument "ACF". "ACF" specifies the type of auto-correlation function. The meanings of differnt numbers
+are as follows:
+    ACF=1: Markovian (single exponential) function model. rho=exp(-2*|tau|/sof)
+    ACF=2: Spherical function model.rho=(1-|tau|/sof), tau<=sof; rho=0, otherwise
+    ACF=3: Second-order Markov function model. rho=exp(-4*|tau|/sof)*(1+4*|tau|/sof)
+    ACF=4: Gaussian (squared exponential) function model. rho=exp(-pi()*(tau/sof)^2)
+where tau represents the distance between two positions, and sof represents the value for scale of fluctuation.
+  In the example, the single exponential function model is adopted, that is, ACF=1.
+  (3) Press the running button in MATLAB platform to perform this program. During the calculation, the curve of SOF values
+versus likelihood function value will be plotted for checking the computing process in time.
+  (4) Read the results of basic parameters. The results will directly be displayed in the command window, in which the user 
+mainly focus on these 6 terms, namely mean_mean, mean_var, alpha_sigma0, beta_sigma0, sof_mean, and sof_var. These 6 terms
+will be used for statistical uncertainty characterization. In the program named as "StatisticalUncertaintyAnalysisAdvanced_master.m",
+these 6 terms are storaged in the argument "BaiscParameters" as follows:
+    BaiscParameters = [mean_mean, mean_var;
+		       alpha_sigma0; beta_sigma0;
+                        sof_mean, sof_var];
+--
+4. Obtain the initial statistics of the borehole data for study
+  To speed up the calculation, the initial values are much important. Accordingly, the initial parameter values of borebole
+data should be figured out. To achieve this, the program named as "InitialParametersEstimation_master.m" should be run.
+  (1) Modify the argument "datasetname". The argument "datasetname" specifies the dataset name. In the example case,
+the dataset names are "BoreholeData_LI_Onsoy site.txt" and "BoreholeData_LI_selected 31 sites.txt", respectively.
+  (2) Modify the argument "ACF". The meaning of ACF here is same as before. In the example case, the ACF takes 1.
+  (3) Press the running button in MATLAB platform to perform this program. 
+  (4) Read the results of initial statistics. In this step, the results of initial statistics are stroaged in the argument
+named as "initial_statisitcs" located at the end line of this program. In the argument "initial_statisitcs", the 1st column
+contains the site ID information, 2nd~4th columns contain the mean, variance, and SOF values, respectively. Users can copy the
+results and paste them into the file storaging initial statistics of the borehole data for use in the next step. In the example
+case, the files are named as "InitialStatistics_LI_Onsoy site.txt" and "InitialStatistics_LI_selected 31 sites.txt", which 
+corresponds to the borehole datasets "InitialStatistics_LI_Onsoy site.txt" and "InitialStatistics_LI_selected 31 sites", respectively.
+--
+5. Characterize the statistical uncertainty
+  After obtaining the basic parameters and the initial parameter values, the statistical uncertainty of borehole data can
+be performed. To achieve this, the program named as "StatisticalUncertaintyAnalysisAdvanced_master.m" should be run.
+  (1) Modify the argument "BoreholeDataName". The argument "BoreholeDataName" specifies the dataset name of the borehole for study.
+In the example case, the dataset names is "BoreholeData_LI_Onsoy site.txt" and "BoreholeData_LI_selected 31 sites.txt". 
+  (2) Modify the argument "InitialStatisticName". The argument "InitialStatisticName" specifies the initial statistics of the
+geo-material parameter in borehole data for study.
+  (3) Modify the argument "filesavepath". The argument "filesavepath" is used to specify the saving path of calculation results. In 
+the example, the saving path is "D:\CodeTest\SUCA_LI_Onsoy".
+  (4) Modify the argument "datatype". If the geo-material parameter is non-negative, the lognormal transformation is suggested to 
+be applied to it. Otherwise, the geo-material parameter can be handled in the original form. In the example case, the geo-material
+parameter is LI that can be negative, and hence, the lognormal transformation is not required.
+  (5) Modify the argument "ACF". The meaning of ACF here is same as before.
+  (6) Modify the argument "BaiscParameters". the argument "BaiscParameters" storages the basic parameters for statistical uncertainty
+characterization, and the basic parameters are obtained by the work in section 2 in this manual.
+  (7) Press the running button in MATLAB platform to perform this program. When the calculation is completed, three figures will be 
+displayed, which presents the histgrams of equivalent samples of three statistical characteristics (i.e. mean, var, and SOF).
+--
+6. Read results of statistical uncertainty characterization
+  According to the specified saving path, results of statistical uncertainty characterization can be found. In the example case, the
+saving path is "D:\CodeTest\SUCA_LI". In the result folder, there are 5 kinds of files, including "ACFID_CRF_Params.txt", 
+ "ACFID_equivalent_samples_site-ID.txt", "ACFID_equivalent_mu_statistics.txt", "ACFID_equivalent_sof_statistics.txt", and 
+"ACFID_equivalent_var_statistics.txt". In the example case, ACF takes 1, and site ID is 1 in the borehole data file. Hence, these 
+files are named as "ACF1_CRF_Params.txt",  "ACF1_equivalent_samples_site-1.txt", "ACF1_equivalent_mu_statistics.txt", "ACF1_equivalent_sof_statistics.txt", and "ACF1_equivalent_var_statistics.txt".
+  (1) File named as "ACFID_equivalent_samples_site-ID.txt" contains equivalent samples of three statistical characteristics for the 
+specified site with ID information, namely mean, var, and sof. The default number of samples is 10000.
+  (2) File named as "ACFID_equivalent_mu_statistics.txt" contains the statistical of mean samples such as the 5% quantile (denoted as
+p5), mean, and 90% confidence interval (denoted as CI90). Note: 95% CI is defined by 2.5% and 97.5% quantiles, 90% CI is defined by
+5% and 95% quantiles, and 80% CI is defined by 10% and 90% quantiles. 
+  (3) File named as "ACFID_equivalent_var_statistics.txt" contains the statistical of var samples.
+  (4) File named as "ACFID_equivalent_sof_statistics.txt" contains the statistical of sof samples.
+  (5) File named as "ACF1_CRF_Params.txt" mainly serves the realization of Bayesian-based conditional random field, and hence, this 
+file contains the updated mean, standard deviation, and SOF values. Besides, the Bayesian-based conditional random field generally
+needs the lower and upper bounds of mean (i.e. 10% and 90% quantiles), and these hyper-parameters (i.e. lower and upper bounds of
+mean) are also presented in this file. For the Bayesian-based conditional random field, the users can refer to Jiang et al. (2018)
+and Han et al. (2022b).
+--
+--
+Note:
+  In CLAY/10/7490 database, it is found that the geo-meterial parametric data in No.713 site is same with No. 706 site, and as a result,
+the No.713 site is excluded from the study.
+--
+--
+Acknowledgements:
+  The developers would like to thank the members of the TC304 Committee on Engineering Practice of Risk Assessment & Management of the
+International Society of Soil Mechanics and Geotechnical Engineering for developing the 304dB database 
+(http://140.112.12.21/issmge/tc304.htm?=1) used in this study and making it available for scientific inquiry.
+--
+--
+References:
+Jiang, S.H., Huang, J.S., Huang, F.M., Yang, J., Yao, C., Zhou, C.B., 2018. Modelling of spatial variability of soil undrained shear 
+  strength by conditional random fields for slope reliability analysis. Applied Mathematical Modelling 63, 374-389.
+Han, L., Wang, L., Zhang, W.G., Chen, Z.X., 2022a. Quantification of statistical uncertainties of unconfined compressive strength of rock
+  using Bayesian learning method. Georisk: Assessment and Management of Risk for Engineered Systems and Geohazards 16, 37-52.
+Han, L., Wang, L., Zhang, W.G., Geng, B.M., Li, S., 2022b. Rockhead profile simulation using an improved generation method of conditional
+  random field. Journal of Rock Mechanics and Geotechnical Engineering 14, 896-908.

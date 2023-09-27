@@ -1,0 +1,88 @@
+User manual
+--
+--
+Program function:
+  This program is designed to characterize the site similairty under the site-specific scenario. This 
+program has four highlights:
+  (1) The similarity degree is a monotonic and absolute indicator with the range of [0, 1].
+  (2) The site similarity characterization is based on the geo-material parametric data, and hence,
+the site similarity can be characterized in three views, namely the mean vector, standard deviation 
+vector, and the correlation coefficient matrix. Aa a result, the site similarity can be characterized
+in more detail.
+  (3) The uncertainty of site similarity characterization results from the field investigation data 
+can be considered.
+  (4) The vertical spatial correlation of geo-material parameter along the borehole can be considered.
+--
+--
+1. Installation
+There are two stratgies to install the package.
+(1) In order to install the package, put the files to a folder of your choice and add this package
+folder to the MATLAB path.
+(2) For simplicity, users can also directly put the files to a new folder within the "bin" folder under 
+the installation path of MATLAB. For instance, in the example case, the package folder is 
+"D:\Program Files\MATLAB\R2022b\bin\CodeTest"
+--
+2. Data preparation
+(1) Prepare the parameter data of Johnson distribution system for all involved geo-material parameters. 
+Put this set of parameter data into the file named as "johnson_params_complete.txt". In the example case, 
+the parameter data of Johnson distribution system is from Ching and Phoon (2014).
+(2) Prepare the target site data and put it into the file named as "target_site_data.txt". Note: the 1st
+column contains the depth data, and the rest columns contain the geo-material parametric data in the target
+site. 
+(3) Prepare the comparative sites data and put it into the file named as "selected_cp_sites_data.txt". Note:
+the 1st row contains the site ID information, the 2nd row contains the depth data for each comparative
+site, and the rest rows contains the geo-material parametric data. One important thing is that the row sequent
+of geo-material parameters should be same with it in the file named as "target_site_data.txt".
+(4) Prepare the SOF (scale of fluctuation) values of comparative sites and put them into the file named as 
+"selected_cp_sites_sof.txt". In this file, the 1st row contains the site ID information, and the 2nd row
+contains the SOF value of each comparative site.
+--
+3. Running the program
+As the package has been installed well, the users can open the master file named as 
+"SiteKnowledgeSimilarityAdvanced_master.m". Then, some arguments should be modified according to the specific
+case. 
+(1) Modify the argument "jmtype". The argument "jmtype" contains the Johnson distribution member information 
+of each geo-material parameter. In the example case, the Johnson distribution member information is from 
+Ching and Phoon (2014).
+(2) Modify the argument "sofv_A". The argument "sofv_A" storages the vertical SOF value of the target site. In 
+the example case, the target site is Onsoy site in Norway, and the final vertical SOF value estimated by LI data
+is 1.809 m. Of course, as the target site data is the site-specific data and hence may contain the statistical 
+uncertainty to some extent. The SOF can be updated by statistical uncertainty characterization, and 1.809 m is the 
+updated results by statistical uncertainty characterization. For the statistical uncertainty characterization of 
+borehole data, it has been introduced in a other package.
+(3) Modify the argument "filesavepath". The argument "filesavepath" storages the saving path of calculation results.
+In the example case, the saving path is "D:\CodeTest\site_similarity_analysis". As a result, all calculation results 
+are saved in the folder named as "site_similarity_analysis".
+(4) Press the running button in MATLAB platform.
+--
+4. Read the results
+There are 3 kinds of files including "smv-siteID.txt", "smv-siteID-statistics.txt", and "smv-statistics-all.txt".
+(1) For "smv-siteID.txt", it contains the similarity degree values of mean vector, standard deviation vector, and 
+correlation coefficient matrix obtained by the multiple random sampling between the target site and the site with 
+specific ID. In the example case, the number of random sampling is 10000. Hence, the file named as "smv-siteID.txt" 
+contains a dataset with 3 columns and 10000 rows, where 1st column contains the similarity degree values of mean 
+vector, 2nd contains the similarity degree values of standard deviation vectors, and the 3rd contains the similarity 
+degree values of correlation coefficient matrices. 
+(2) For "smv-siteID-statistics.txt", it contains the statistics of similarity degree results in the file named as 
+"smv-siteID.txt", including the mean and median.
+(3) For "smv-statistics-all.txt", it contains the statistics of similarity degree results for all comparative sites
+presented in the file named as "selected_cp_sites_data.txt".
+--
+--
+Acknowledgements:
+The developers would like to thank the members of the TC304 Committee on Engineering Practice of Risk Assessment & Management
+of the International Society of Soil Mechanics and Geotechnical Engineering for developing the 304dB database (http://140.112.12.21/issmge/tc304.htm?=1) used in this study and making it available for scientific inquiry.
+--
+--
+References
+[1] Ching, J.Y., Phoon, K.K., 2014. Correlations among some clay parameters - the multivariate distribution. Canadian 
+Geotechnical Journal 51, 686-704.
+
+
+
+
+
+
+
+
+

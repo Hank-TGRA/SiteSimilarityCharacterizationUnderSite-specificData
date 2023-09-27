@@ -1,0 +1,4 @@
+smv_mu_mean, smv_sd_mean, smv_r_mean
+0.395709, 0.325665, 0.541345
+smv_mu_media, smv_sd_media, smv_r_media
+0.363188, 0.339767, 0.561307
